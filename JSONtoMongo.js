@@ -10,14 +10,18 @@ var fs = require('fs'),
     config = require('./config');
 
 /* Connect to your database */
+mongoose.connect(config.db.uri);
 
 /* 
   Instantiate a mongoose model for each listing object in the JSON file, 
   and then save it to your Mongo database 
  */
+var listings = require('./listings.json').entries;
+for (var i = 0; i < listings.length; i++) {
+    var item = Listing(listings[i]);
+    item.save(function(err) {
+        if (err) throw err;
 
-
-/* 
-  Once you've written + run the script, check out your MongoLab database to ensure that 
-  it saved everything correctly. 
- */
+        console.log("Listing created..");
+    });
+}
